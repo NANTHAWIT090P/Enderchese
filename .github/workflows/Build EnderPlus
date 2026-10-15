@@ -1,0 +1,23 @@
+name: Build EnderPlus
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: unzip -o EnderPlus-source.zip
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: EnderPlus/pom.xml
+      - run: mvn --batch-mode clean package
+        working-directory: EnderPlus
+      - uses: actions/upload-artifact@v4
+        with:
+          name: EnderPlus
+          path: EnderPlus/target/EnderPlus-1.0.0.jar
